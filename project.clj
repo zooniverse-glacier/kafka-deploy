@@ -1,8 +1,8 @@
 (defproject kafka-deploy "0.0.1-SNAPSHOT"
-  :source-path "src/clj"
-  :test-path "test/clj"
-  :resources-path "src/resource"
-  :run-aliases {:deploy kafka.deploy.provision}
+  :source-paths ["src/clj"]
+  :test-paths ["test/clj"]
+  :profiles {:dev {:resource-paths ["src/resource"]}} 
+  :aliases {"deploy-kafka" ["run" "-m" "kafka.deploy.provision"]}
 
   :repositories {
                  "sonatype" "https://oss.sonatype.org/content/repositories/releases"

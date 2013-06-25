@@ -47,9 +47,9 @@
                                   (:username *USER*)
                                   (:public-key-path *USER*)))
             :configure (phase
-                        (java/java :sun :jdk))}))
+                        (java/java :openjdk))}))
 
-(def ZK-VERSION "3.3.4")
+(def ZK-VERSION "3.3.5")
 
 (defn zookeeper-server-spec []
   (server-spec
@@ -67,7 +67,7 @@
                             ))
                         }))
 
-(def RELEASE-URL "http://people.apache.org/~nehanarkhede/kafka-0.7.0-incubating/kafka-0.7.0-incubating-src.tar.gz")
+(def RELEASE-URL "https://github.com/miguno/kafka/archive/scala-2.9.2.tar.gz")
 
 (defn download-release [request]
   (-> request
@@ -94,10 +94,10 @@
                            "build kafka"
                            (cd "$HOME")
                            (tar "-xzf kafka.tar.gz")
-                           (mv "kafka-0.7.0-incubating-src" "kafka")
+                           (mv "kafka-scala-2.9.2" "kafka")
                            (cd "kafka")
                            (sh "sbt update")
-                           (sh "sbt package")
+                           (sh "sbt '++2.9.2 package'")
                            (mkdir "logs")))
             :post-configure
             (fn [request]
@@ -130,7 +130,7 @@
     (str "kafka-zookeeper-" name)
     :node-spec (node-spec
                   :image {:inbound-ports [2181 22]
-                          :image-id "us-east-1/ami-08f40561"
+                          :image-id "us-east-1/ami-c30360aa"
                           :hardware-id "m1.large"
                           })
     :extends (zookeeper-server-spec)))
@@ -140,7 +140,7 @@
     (str "kafka-" name)
     :node-spec (node-spec
                   :image {:inbound-ports [2181 22]
-                          :image-id "us-east-1/ami-08f40561"
+                          :image-id "us-east-1/ami-c30360aa"
                           :hardware-id "m1.large"
                           })
     :extends (kafka-server-spec name)))
